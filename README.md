@@ -1,4 +1,4 @@
-# MyChatGPT
+# MyNewChatGPT
 
 This is a OSS standalone ChatGPT client. It is based on [ChatGPT](https://openai.com/blog/chatgpt).
 
