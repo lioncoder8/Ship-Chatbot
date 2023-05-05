@@ -1,0 +1,37 @@
+name: Build/release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions: write-all
+
+env:
+  SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_TOKEN }}
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Snapcraft
+        uses: samuelmeuli/action-snapcraft@v1
+        # Only install Snapcraft on Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          release: true
